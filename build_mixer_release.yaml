@@ -3,10 +3,6 @@
 
 steps:
 - name: 'gcr.io/cloud-builders/git'
-  args: [ 'clone', 'https://github.com/rvkubiak/mixer' ]
-  id: 'Sync from Github'
-
-- name: 'gcr.io/cloud-builders/git'
   args: [ 'checkout', "$TAG_NAME" ]
   id: 'Git checkout at tag'
 
