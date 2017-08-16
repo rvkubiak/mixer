@@ -2,10 +2,6 @@
 #   \d+\.\d+\.\d+
 
 steps:
-- name: 'gcr.io/cloud-builders/git'
-  args: [ 'checkout', "$TAG_NAME" ]
-  id: 'Git checkout at tag'
-
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ 'bash', './bin/publish-docker-images.sh', '-h', "gcr.io/$PROJECT_ID", '-t', "$TAG_NAME" ]
   dir: 'mixer'
