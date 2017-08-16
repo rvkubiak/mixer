@@ -4,6 +4,5 @@
 steps:
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ 'bash', './bin/publish-docker-images.sh', '-h', "gcr.io/$PROJECT_ID", '-t', "$TAG_NAME" ]
-  dir: 'mixer'
 
 timeout: 1800s
