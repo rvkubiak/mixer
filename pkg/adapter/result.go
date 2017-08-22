@@ -15,17 +15,14 @@
 package adapter
 
 import (
-	"istio.io/mixer/adapter/denier"
-	"istio.io/mixer/adapter/list"
-	"istio.io/mixer/adapter/noop2"
-	"istio.io/mixer/pkg/adapter"
+	rpc "github.com/googleapis/googleapis/google/rpc"
 )
 
-// Inventory2 returns the inventory of all available adapters.
-func Inventory2() []adapter.InfoFn {
-	return []adapter.InfoFn{
-		noop2.GetBuilderInfo,
-		denier.GetBuilderInfo,
-		list.GetBuilderInfo,
-	}
+// Result is the common interface supported by Results.
+type Result interface {
+	// Get status embedded in the result.
+	GetStatus() rpc.Status
+
+	// Set status embeds status in result.
+	SetStatus(rpc.Status)
 }
