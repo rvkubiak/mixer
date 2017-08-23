@@ -1,0 +1,12 @@
+# Used for automated builds triggered on Git tags pushed matching the regex:
+#   \d+\.\d+\.\d+
+
+steps:
+- name: 'gcr.io/istio-io/istio-builder'
+  args:
+  - 'bash'
+  - './bin/publish-docker-images.sh'
+  - '-h gcr.io/istio-builder-prototype,docker.io/istio'
+  - '-t TESTING'
+
+timeout: 1800s
