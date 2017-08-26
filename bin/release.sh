@@ -51,4 +51,3 @@ fi
 ./bin/publish-docker-images.sh \
     -h "$HUBS" \
     -t "$version"
-
