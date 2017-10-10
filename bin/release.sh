@@ -13,6 +13,7 @@ function usage() {
 }
 
 # Initialize variables
+ISTIO_RELEASE="https://raw.githubusercontent.com/istio/istio/master/istio.RELEASE"
 TAG_NAME=""
 VERSION_OVERRIDE=""
 
@@ -30,21 +31,22 @@ if [ ! -z "${VERSION_OVERRIDE}" ] ; then
 elif [ ! -z "${TAG_NAME}" ] ; then
   version="${TAG_NAME}"
 else
-  echo "Either -t or -v is a required argument."
-  usage
+  version=$(curl "$ISTIO_RELEASE")
 fi
 
-#mkdir -p $HOME/.docker
-#gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
-#gcloud kms decrypt \
-#       --ciphertext-file=$HOME/.docker/config.json.enc \
-#       --plaintext-file=$HOME/.docker/config.json \
-#       --location=global \
-#       --keyring=Secrets \
-#       --key=DockerHub
+echo "Version is: $version"
+exit 1
+
+mkdir -p $HOME/.docker
+gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
+gcloud kms decrypt \
+       --ciphertext-file=$HOME/.docker/config.json.enc \
+       --plaintext-file=$HOME/.docker/config.json \
+       --location=global \
+       --keyring=Secrets \
+       --key=DockerHub
 
 ./bin/publish-docker-images.sh \
-    -h gcr.io/istio-builder-prototype \
-    -t $version
+    -h gcr.io/istio-io,docker.io/istio \
+    -t "$version"
 
-#    -h gcr.io/istio-io,docker.io/istio \
