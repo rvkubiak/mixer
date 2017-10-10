@@ -7,19 +7,21 @@ set -x
 
 function usage() {
   echo "$0 \
+    -h <comma delimited list of docker repositories> \
     -t <tag name to apply to artifacts> \
     -v <version to apply instead of tag>"
   exit 1
 }
 
 # Initialize variables
-ISTIO_RELEASE="https://raw.githubusercontent.com/istio/istio/master/istio.RELEASE"
+HUBS="gcr.io/istio-io,docker.io/istio"
 TAG_NAME=""
 VERSION_OVERRIDE=""
 
 # Handle command line args
-while getopts i:t:v: arg ; do
+while getopts h:t:v: arg ; do
   case "${arg}" in
+    h) HUBS="${OPTARG}";;
     t) TAG_NAME="${OPTARG}";;
     v) VERSION_OVERRIDE="${OPTARG}";;
     *) usage;;
@@ -31,11 +33,9 @@ if [ ! -z "${VERSION_OVERRIDE}" ] ; then
 elif [ ! -z "${TAG_NAME}" ] ; then
   version="${TAG_NAME}"
 else
-  version=$(curl "$ISTIO_RELEASE")
+  echo "Either -t or -v is a required argument."
+  usage
 fi
-
-echo "Version is: $version"
-exit 1
 
 mkdir -p $HOME/.docker
 gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
@@ -47,6 +47,6 @@ gcloud kms decrypt \
        --key=DockerHub
 
 ./bin/publish-docker-images.sh \
-    -h gcr.io/istio-io,docker.io/istio \
+    -h "$HUBS" \
     -t "$version"
 

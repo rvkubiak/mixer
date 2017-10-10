@@ -1,12 +1,14 @@
-# Used for automated builds triggered on Git tags pushed matching the regex:
-#   \d+\.\d+\.\d+
+# Used for periodic automated builds.
+# To execute a build manually submit a job that specifies a version:
+#   gcloud container builds submit --config bin/periodic_mixer_release.yaml \
+#       --substitutions=_VERSION=foo --no-source
 
 steps:
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone', 'https://github.com/rvkubiak/mixer']
 
 - name: 'gcr.io/istio-io/istio-builder'
-  args: ['./bin/release.sh']
+  args: ['./bin/release.sh', '-v', '$_VERSION', '-h', 'gcr.io/istio-builder-prototype']
   dir: 'mixer'
 
 timeout: 1800s
