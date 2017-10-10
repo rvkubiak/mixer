@@ -2,7 +2,11 @@
 #   \d+\.\d+\.\d+
 
 steps:
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', 'https://github.com/rvkubiak/mixer']
+
 - name: 'gcr.io/istio-io/istio-builder'
-  args: ['./bin/release.sh', '-t $TAG_NAME']
+  args: ['./bin/release.sh', '-t', '$TAG_NAME', '-v', '$_VERSION']
+  dir: 'mixer'
 
 timeout: 1800s
