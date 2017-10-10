@@ -44,6 +44,7 @@ fi
 #       --key=DockerHub
 
 ./bin/publish-docker-images.sh \
-#    -h gcr.io/istio-io,docker.io/istio \
     -h gcr.io/istio-builder-prototype \
     -t $version
+
+#    -h gcr.io/istio-io,docker.io/istio \
