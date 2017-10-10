@@ -38,13 +38,13 @@ else
 fi
 
 mkdir -p $HOME/.docker
-gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
-gcloud kms decrypt \
-       --ciphertext-file=$HOME/.docker/config.json.enc \
-       --plaintext-file=$HOME/.docker/config.json \
-       --location=global \
-       --keyring=Secrets \
-       --key=DockerHub
+#gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
+#gcloud kms decrypt \
+#       --ciphertext-file=$HOME/.docker/config.json.enc \
+#       --plaintext-file=$HOME/.docker/config.json \
+#       --location=global \
+#       --keyring=Secrets \
+#       --key=DockerHub
 
 ./bin/publish-docker-images.sh \
     -h "$HUBS" \
