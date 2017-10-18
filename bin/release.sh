@@ -37,7 +37,7 @@ else
   usage
 fi
 
-if [[ "$HUBS" == **"docker.io"** ]] ; then
+if [[ "$HUBS" == *"docker.io"* ]] ; then
   mkdir -p $HOME/.docker
   gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
   gcloud kms decrypt \
