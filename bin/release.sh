@@ -37,14 +37,16 @@ else
   usage
 fi
 
-mkdir -p $HOME/.docker
-#gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
-#gcloud kms decrypt \
-#       --ciphertext-file=$HOME/.docker/config.json.enc \
-#       --plaintext-file=$HOME/.docker/config.json \
-#       --location=global \
-#       --keyring=Secrets \
-#       --key=DockerHub
+if [[ "$HUBS" == **"docker.io"** ]] ; then
+  mkdir -p $HOME/.docker
+  gsutil cp gs://istio-secrets/dockerhub_config.json.enc $HOME/.docker/config.json.enc
+  gcloud kms decrypt \
+         --ciphertext-file=$HOME/.docker/config.json.enc \
+         --plaintext-file=$HOME/.docker/config.json \
+         --location=global \
+         --keyring=Secrets \
+         --key=DockerHub
+fi
 
 ./bin/publish-docker-images.sh \
     -h "$HUBS" \
